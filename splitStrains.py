@@ -777,8 +777,8 @@ if __name__ == "__main__":
     parser.add_argument('-z','--reuse', action='store_true', help='if this flag is specified the program will reuse the csv file from the previous run')
     parser.add_argument('-mo', metavar='gmm/bmm', dest='model', type=str, help='specify clustering model: GMM or BMM. Default GMM.', default='gmm')
     parser.add_argument('-f', metavar="plotName", dest='plotName', default='plot', help='name for the histogram figure')
-    parser.add_argument('-s', metavar='n', required=True, dest='regionStart', type=int, help='specify the start position on the genome')
-    parser.add_argument('-e', metavar='n', required=True, dest='regionEnd', type=int, help='specify the end position on the genome')
+    parser.add_argument('-s', metavar='n', dest='regionStart', type=int, help='specify the start position on the genome. Default=0')
+    parser.add_argument('-e', metavar='n', dest='regionEnd', type=int, help='specify the end position on the genome. Default is the genome length.')
     parser.add_argument('-r', metavar='ref', required=True, dest='ref', help='genome reference')
     parser.add_argument('-b', metavar='gff', dest='gff', help='use gff file to process only gff regions', default='')
     parser.add_argument('-o', metavar='dir', required=True, dest='outputDir', help='output directory')
@@ -827,16 +827,22 @@ if __name__ == "__main__":
         logging.error(f'{bamFilePath} or {refFastaPath} is not found.')
         exit()
 
+    logging.info('splitStrain.py has started.')
+
     refName = samfile.references[0]
     refLength = samfile.lengths[0]
 
-    logging.info('splitStrain.py has started.')
+    # Parsing interval
+    if not regionStart:
+        regionStart = 0
+
+    if not regionEnd:
+        regionEnd = refLength
 
     if (regionEnd > refLength):
         logging.warning('regionEnd > reference length.')
 
     interval = regionEnd - regionStart
-
     if interval < 1000000:
         logging.warning(f'the interval length {interval} is too small.')
 
