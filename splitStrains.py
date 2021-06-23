@@ -1,24 +1,18 @@
+import argparse
+import logging
+import os
+import sys
+
 import numpy as np
 import matplotlib.pyplot as plt
-import math
-from sklearn import mixture
-import pysam
-import os
-import argparse
-import seaborn as sns
-import sys
-import logging
-from mixem.distribution.distribution import Distribution
 import mixem
-from scipy.stats import binom
-from scipy.stats import chi2
-from scipy.stats import multinomial
-from scipy.stats import norm
-from scipy.stats import entropy
-from scipy.special import factorial, comb, xlogy
-
-from scipy.optimize import linprog
-from scipy.optimize import minimize, Bounds
+from mixem.distribution.distribution import Distribution
+import pysam
+from scipy.special import comb, xlogy
+from scipy.stats import chi2, entropy, multinomial, nom
+from scipy.optimize import linprog, minimize, Bounds
+import seaborn as sns
+from sklearn import mixture
 
 
 TITLE_FONT_SIZE = 8
@@ -833,6 +827,9 @@ if __name__ == "__main__":
     intervals = []  # list of Interval objects. This will be populated if gff file is provided
     freqVec = []    # vector format [a prop, c prop, t prop, g prop, position, depth]
     freqVecCSV = 'freqVec.csv'
+
+    # Create output directory
+    os.makedirs(outputDir, exist_ok=True)
 
     # compute freqVec
     if reuseFreqVec == False:
