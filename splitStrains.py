@@ -9,7 +9,7 @@ import mixem
 from mixem.distribution.distribution import Distribution
 import pysam
 from scipy.special import comb, xlogy
-from scipy.stats import chi2, entropy, multinomial, nom
+from scipy.stats import chi2, entropy, multinomial, norm
 from scipy.optimize import linprog, minimize, Bounds
 import seaborn as sns
 from sklearn import mixture
@@ -599,7 +599,7 @@ def plotScatter(outputDir, freqVec, originalFrecVec, figureFileName, entropyVec,
     ax.scatter(fpoints[:,0], fpoints[:,1], c='b', s=9)
 
     ax.set_yticks(np.arange(0,101,10))
-    ax.legend(legend, prop={'size': AXES_FONT_SIZE})
+    ax.legend(legend, loc=1, prop={'size': AXES_FONT_SIZE})
 
     try:
         plt.savefig(outputDir + '/' + figureFileName + '-scatter.png', dpi=DPI)
@@ -629,7 +629,7 @@ def plotHist(outputDir, originalFreqVecFlat,  freqVecFlat, gmm, figureFileName):
     numBins = 100
     axs[0].hist(originalFreqVecFlat, bins=numBins, range=(0,numBins), alpha=0.5, facecolor='r')
     axs[0].hist(freqVecFlat, bins=numBins, range=(0,numBins), facecolor='b')
-    axs[0].set_yscale('log', basey=2, nonposy='clip')
+    axs[0].set_yscale('log', base=2, nonpositive='clip')
     axs[0].set_title(title1, fontsize=TITLE_FONT_SIZE)
     axs[0].set_ylabel("proportion frequency", fontsize=LABEL_FONT_SIZE)
     axs[0].set_xticks(range(0, numBins+1, 10))
